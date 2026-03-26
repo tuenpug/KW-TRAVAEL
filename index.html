@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KW TRAVEL - 智能行程策劃</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Noto Sans TC"', '"Microsoft JhengHei"', 'sans-serif'],
+            },
+            colors: {
+              primary: '#65a30d', // Kiwi Green (Lime 600)
+              primaryLight: '#bef264', // Lime 300
+              secondary: '#0ea5e9', // Sky Blue
+              accent: '#facc15', // Sunshine Yellow
+              background: '#fefce8', // Very light yellow/cream
+              surface: '#ffffff',
+            },
+            backgroundImage: {
+              'kiwi-pattern': "url('data:image/svg+xml,%3Csvg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"%2365a30d\" fill-opacity=\"0.15\" fill-rule=\"evenodd\"%3E%3Ccircle cx=\"4\" cy=\"4\" r=\"1\"/%3E%3Ccircle cx=\"16\" cy=\"16\" r=\"1\"/%3E%3C/g%3E%3C/svg%3E')",
+            },
+            animation: {
+              blob: "blob 10s infinite",
+              'blob-delay': "blob 10s infinite 2s",
+              'blob-slow': "blob 12s infinite 4s",
+            },
+            keyframes: {
+              blob: {
+                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                "33%": { transform: "translate(30px, -50px) scale(1.2)" },
+                "66%": { transform: "translate(-20px, 20px) scale(0.8)" },
+                "100%": { transform: "translate(0px, 0px) scale(1)" },
+              },
+            },
+          },
+        },
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "date-fns": "https://esm.sh/date-fns@^4.1.0",
+    "uuid": "https://esm.sh/uuid@^13.0.0"
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-background text-slate-800 font-sans antialiased selection:bg-primaryLight selection:text-primary-900">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
