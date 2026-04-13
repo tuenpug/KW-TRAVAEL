@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { TripData, Itinerary, Activity, SavedTrip } from './types';
 import { TripContext } from './views/TripContext';
 import { ItineraryPlanner } from './views/ItineraryPlanner';
 import { ItineraryOverview } from './views/ItineraryOverview';
 import { generateInitialItinerary, regenerateActivity, regenerateDay, suggestGapActivity } from './services/geminiService';
-import { LayoutGrid, Calendar, ArrowLeft, Save, FolderOpen, Trash2, Edit2, Clock, MapPin } from 'lucide-react';
+import { LayoutGrid, Calendar, ArrowLeft, Save, FolderOpen, Trash2, Edit2, Clock, MapPin, FileDown } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { Modal } from './components/Modal';
 import { Button } from './components/Button';
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
+import { useReactToPrint } from 'react-to-print';
+import { PrintableView } from './components/PrintableView';
 
 const INITIAL_TRIP_DATA: TripData = {
   destination: '',
@@ -56,6 +58,12 @@ const App: React.FC = () => {
   const [isSavedTripsModalOpen, setIsSavedTripsModalOpen] = useState(false);
   const [editingTripId, setEditingTripId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+
+  const printRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: `${tripData.destination} 行程`,
+  });
 
   // Load saved trips from local storage on mount
   useEffect(() => {
@@ -241,6 +249,14 @@ const App: React.FC = () => {
                 {/* Actions */}
                 <div className="flex items-center gap-2 flex-none">
                     <button 
+                        onClick={() => handlePrint()}
+                        className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-xl text-sm font-bold shadow-lg shadow-secondary/20 hover:bg-sky-400 hover:text-white transition-all active:scale-95"
+                        title="發佈為 PDF"
+                    >
+                        <FileDown className="w-4 h-4" /> <span className="hidden sm:inline">發佈 PDF</span>
+                    </button>
+
+                    <button 
                         onClick={handleSaveCurrentTrip}
                         className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primaryLight hover:text-slate-900 transition-all active:scale-95"
                         title="儲存當前行程"
@@ -378,6 +394,11 @@ const App: React.FC = () => {
             )}
         </div>
       </Modal>
+
+      {/* Hidden Print View */}
+      <div style={{ display: 'none' }}>
+        <PrintableView ref={printRef} tripData={tripData} itinerary={itinerary} />
+      </div>
     </div>
   );
 };
