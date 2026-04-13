@@ -8,10 +8,9 @@ interface PrintableViewProps {
   itinerary: Itinerary;
 }
 
-export const PrintableView = React.forwardRef<HTMLDivElement, PrintableViewProps>(
-  ({ tripData, itinerary }, ref) => {
+export const PrintableView: React.FC<PrintableViewProps> = ({ tripData, itinerary }) => {
     return (
-      <div ref={ref} className="print-container bg-white text-black">
+      <div className="print-container bg-white text-black">
         {/* We use standard CSS to hide interactive elements during print */}
         <style>
           {`
@@ -68,7 +67,4 @@ export const PrintableView = React.forwardRef<HTMLDivElement, PrintableViewProps
         </div>
       </div>
     );
-  }
-);
-
-PrintableView.displayName = 'PrintableView';
+};

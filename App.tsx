@@ -10,7 +10,6 @@ import { Modal } from './components/Modal';
 import { Button } from './components/Button';
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
-import { useReactToPrint } from 'react-to-print';
 import { PrintableView } from './components/PrintableView';
 
 const INITIAL_TRIP_DATA: TripData = {
@@ -59,11 +58,9 @@ const App: React.FC = () => {
   const [editingTripId, setEditingTripId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
 
-  const printRef = useRef<HTMLDivElement>(null);
-  const handlePrint = useReactToPrint({
-    contentRef: printRef,
-    documentTitle: `${tripData.destination} 行程`,
-  });
+  const handlePrint = () => {
+    window.print();
+  };
 
   // Load saved trips from local storage on mount
   useEffect(() => {
@@ -212,9 +209,10 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative text-slate-900">
-      <BackgroundDecor />
-      
-      {/* Top Navigation Bar */}
+      <div className="print:hidden flex flex-col flex-1">
+        <BackgroundDecor />
+        
+        {/* Top Navigation Bar */}
       {step !== 'context' && (
         <header className="bg-white/80 backdrop-blur-md border-b border-primary/20 sticky top-0 z-50 shadow-sm transition-all duration-300">
           <div className="max-w-7xl mx-auto px-4 h-18 flex flex-col md:flex-row items-center justify-between py-2 gap-2">
@@ -394,10 +392,13 @@ const App: React.FC = () => {
             )}
         </div>
       </Modal>
+      </div>
 
       {/* Hidden Print View */}
-      <div style={{ display: 'none' }}>
-        <PrintableView ref={printRef} tripData={tripData} itinerary={itinerary} />
+      <div className="hidden print:block">
+        {step !== 'context' && tripData.arrivalDate && (
+          <PrintableView tripData={tripData} itinerary={itinerary} />
+        )}
       </div>
     </div>
   );
