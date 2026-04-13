@@ -15,54 +15,73 @@ export const PrintableView: React.FC<PrintableViewProps> = ({ tripData, itinerar
         <style>
           {`
             @media print {
-              @page { size: A4 landscape; margin: 10mm; }
+              @page { size: A4 landscape; margin: 8mm; }
               body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
               .no-print { display: none !important; }
               .page-break { page-break-before: always; }
               .print-container { padding: 0; background: white; }
-              /* Hide scrollbars and ensure full height */
+              
+              /* Hide scrollbars */
               .overflow-y-auto, .overflow-x-auto { overflow: visible !important; max-height: none !important; }
-              /* Ensure grid layout expands */
-              .grid { display: block !important; }
-              .grid > div { page-break-inside: avoid; margin-bottom: 20px; }
+              
+              /* Planner Scaling */
+              .planner-print-container {
+                 height: 680px; /* Fixed height to prevent blank pages */
+                 overflow: hidden;
+              }
+              .planner-print-wrapper {
+                 transform: scale(0.63);
+                 transform-origin: top left;
+                 width: 158%; /* 100 / 0.63 */
+              }
+              .planner-print-wrapper button { display: none !important; }
+              .planner-print-wrapper .cursor-pointer { cursor: default !important; }
+              .planner-print-wrapper .hover\\:scale-\\[1\\.02\\] { transform: none !important; }
+              .planner-print-wrapper .shadow-sm { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
+              
+              /* Overview Scaling */
+              .overview-print-container {
+                 height: 700px;
+                 overflow: hidden;
+              }
+              .overview-print-wrapper {
+                 transform: scale(0.35);
+                 transform-origin: top left;
+                 width: 285%; /* 100 / 0.35 */
+              }
             }
           `}
         </style>
         
-        <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6 text-center">{tripData.destination} 行程概覽</h1>
-          <ItineraryOverview tripData={tripData} itinerary={itinerary} />
+        {/* Page 1: Planner (Details) */}
+        <div className="p-4">
+          <h1 className="text-3xl font-bold mb-2 text-center">{tripData.destination} 行程細節</h1>
+          <div className="planner-print-container">
+            <div className="planner-print-wrapper">
+              <ItineraryPlanner 
+                tripData={tripData}
+                itinerary={itinerary}
+                onUpdateItinerary={() => {}}
+                onUpdateTripData={() => {}}
+                onRegenerateItem={async () => {}}
+                onRegenerateDay={async () => {}}
+                onAddItem={async () => {}}
+                onMoveActivity={async () => {}}
+                isPrintMode={true}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="page-break"></div>
 
-        <div className="p-8">
-          <h1 className="text-3xl font-bold mb-6 text-center">{tripData.destination} 行程細節</h1>
-          {/* We wrap ItineraryPlanner in a div that hides its interactive buttons via CSS */}
-          <div className="planner-print-wrapper">
-            <style>
-              {`
-                @media print {
-                  .planner-print-wrapper button { display: none !important; }
-                  .planner-print-wrapper .cursor-pointer { cursor: default !important; }
-                  .planner-print-wrapper .hover\\:scale-\\[1\\.02\\] { transform: none !important; }
-                  .planner-print-wrapper .shadow-sm { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
-                  /* Make the planner timeline expand fully */
-                  .planner-print-wrapper .min-w-\\[1200px\\] { min-width: 100% !important; width: 100% !important; }
-                  .planner-print-wrapper .overflow-x-auto { overflow: visible !important; }
-                }
-              `}
-            </style>
-            <ItineraryPlanner 
-              tripData={tripData}
-              itinerary={itinerary}
-              onUpdateItinerary={() => {}}
-              onUpdateTripData={() => {}}
-              onRegenerateItem={async () => {}}
-              onRegenerateDay={async () => {}}
-              onAddItem={async () => {}}
-              onMoveActivity={async () => {}}
-            />
+        {/* Page 2: Overview */}
+        <div className="p-4">
+          <h1 className="text-3xl font-bold mb-2 text-center">{tripData.destination} 行程概覽</h1>
+          <div className="overview-print-container">
+            <div className="overview-print-wrapper">
+              <ItineraryOverview tripData={tripData} itinerary={itinerary} />
+            </div>
           </div>
         </div>
       </div>

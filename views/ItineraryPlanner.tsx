@@ -15,12 +15,12 @@ interface ItineraryPlannerProps {
   onRegenerateDay: (dayIndex: number) => Promise<void>;
   onAddItem: (dayIndex: number, time: string) => Promise<void>;
   onMoveActivity: (id: string, newDay: number, newTime: string, oldDay: number, oldTime: string, duration: number) => Promise<void>;
+  isPrintMode?: boolean;
 }
 
 const START_HOUR = 7;
 const END_HOUR = 23;
 const HOURS_COUNT = END_HOUR - START_HOUR + 1;
-const PIXELS_PER_HOUR = 160; 
 const HEADER_HEIGHT = 80; // Fixed header height
 
 // --- Activity Card Component ---
@@ -156,8 +156,10 @@ export const ItineraryPlanner: React.FC<ItineraryPlannerProps> = ({
   onRegenerateItem,
   onRegenerateDay,
   onAddItem,
-  onMoveActivity
+  onMoveActivity,
+  isPrintMode
 }) => {
+  const PIXELS_PER_HOUR = isPrintMode ? 60 : 160;
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [draggedActivityId, setDraggedActivityId] = useState<string | null>(null);
   const [isRegenerating, setIsRegenerating] = useState<string | null>(null); 
