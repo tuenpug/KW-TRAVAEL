@@ -13,10 +13,10 @@ export const ItineraryOverview: React.FC<ItineraryOverviewProps> = ({ tripData, 
   const days = Array.from({ length: calculateDays(tripData.arrivalDate, tripData.departureDate) }, (_, i) => i);
 
   return (
-    <div className="min-h-full bg-white/40 p-8 print:p-0 flex justify-center backdrop-blur-sm">
-        <div className="max-w-4xl w-full print:max-w-none bg-white shadow-2xl print:shadow-none rounded-3xl print:rounded-none overflow-hidden relative">
+    <div className="min-h-full bg-white/40 p-8 print:p-0 flex justify-center backdrop-blur-sm print:block print:w-full print:bg-white print:backdrop-filter-none">
+        <div className="max-w-4xl w-full print:max-w-none print:w-full bg-white shadow-2xl print:shadow-none rounded-3xl print:rounded-none overflow-hidden relative print:bg-white">
             {/* Poster Header */}
-            <div className="bg-primary p-6 md:p-12 text-center text-white relative overflow-hidden print:p-6 print:rounded-t-3xl">
+            <div className="bg-primary p-6 md:p-12 text-center text-white relative overflow-hidden print:hidden">
                 <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-300 via-primary to-green-800"></div>
                 <div className="relative z-10">
                     <div className="flex justify-center mb-6">
@@ -40,7 +40,7 @@ export const ItineraryOverview: React.FC<ItineraryOverviewProps> = ({ tripData, 
             </div>
 
             {/* Content Body */}
-            <div className="p-8 md:p-12 space-y-16 print:space-y-0 print:grid print:grid-cols-3 print:gap-x-6 print:gap-y-8 bg-white">
+            <div className="p-8 md:p-12 print:p-2 space-y-16 print:space-y-0 print:block print:columns-4 print:gap-6 bg-white">
                 {days.map(dayIndex => {
                     const date = addDays(parseISO(tripData.arrivalDate), dayIndex);
                     const activities = itinerary
@@ -48,7 +48,7 @@ export const ItineraryOverview: React.FC<ItineraryOverviewProps> = ({ tripData, 
                         .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
                     return (
-                        <div key={dayIndex} className="relative print:break-inside-avoid">
+                        <div key={dayIndex} className="relative print:break-inside-avoid print:mb-6">
                             {/* Day Header */}
                             <div className="flex items-start gap-6 mb-8 print:mb-4 print:gap-4">
                                 <div className="flex-none text-center">

@@ -74,7 +74,8 @@ export const PrintableView: React.FC<PrintableViewProps> = ({ tripData, itinerar
         <div className="page-break"></div>
 
         {/* Page 2: Overview */}
-        <div className="pt-2"> {/* Minimal padding to save space */}
+        <div className="pt-2 w-full"> {/* Minimal padding to save space */}
+          <h1 className="text-3xl font-black mb-6 text-center text-slate-800">{tripData.destination} 行程概覽</h1>
           <div className="overview-print-container">
             <div className="overview-print-wrapper">
               <ItineraryOverview tripData={tripData} itinerary={itinerary} />
