@@ -40,7 +40,17 @@ export const ItineraryOverview: React.FC<ItineraryOverviewProps> = ({ tripData, 
             </div>
 
             {/* Content Body */}
-            <div className="p-8 md:p-12 print:p-2 space-y-16 print:space-y-0 print:block print:columns-4 print:gap-6 bg-white">
+            <div className="p-8 md:p-12 space-y-16 print:p-0 print:space-y-0 print:gap-x-4 print:gap-y-8 bg-white print-dynamic-grid">
+                <style>
+                  {`
+                    @media print {
+                      .print-dynamic-grid {
+                        display: grid !important;
+                        grid-template-columns: repeat(${Math.min(days.length, 5)}, minmax(0, 1fr)) !important;
+                      }
+                    }
+                  `}
+                </style>
                 {days.map(dayIndex => {
                     const date = addDays(parseISO(tripData.arrivalDate), dayIndex);
                     const activities = itinerary
@@ -48,50 +58,50 @@ export const ItineraryOverview: React.FC<ItineraryOverviewProps> = ({ tripData, 
                         .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
                     return (
-                        <div key={dayIndex} className="relative print:break-inside-avoid print:mb-6">
+                        <div key={dayIndex} className="relative print:break-inside-avoid print:flex print:flex-col">
                             {/* Day Header */}
-                            <div className="flex items-start gap-6 mb-8 print:mb-4 print:gap-4">
+                            <div className="flex items-start gap-6 mb-8 print:mb-3 print:gap-2">
                                 <div className="flex-none text-center">
-                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider print:text-xs">{format(date, 'MMM')}</div>
-                                    <div className="text-4xl font-black text-slate-800 print:text-2xl">{format(date, 'dd')}</div>
+                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider print:text-[9px]">{format(date, 'MMM')}</div>
+                                    <div className="text-4xl font-black text-slate-800 print:text-xl print:leading-none">{format(date, 'dd')}</div>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-primary flex items-center gap-3 print:text-lg">
+                                    <h2 className="text-2xl font-bold text-primary flex items-center gap-3 print:text-sm print:gap-1">
                                         Day {dayIndex + 1}
-                                        <span className="text-slate-300 text-lg font-normal print:text-sm">/ {format(date, 'EEEE')}</span>
+                                        <span className="text-slate-300 text-lg font-normal print:text-[10px]">/ {format(date, 'EEEE')}</span>
                                     </h2>
-                                    <div className="inline-flex items-center gap-2 mt-1 px-3 py-1 bg-slate-50 rounded-lg border border-slate-100 text-slate-600 text-sm print:text-xs print:px-2">
-                                        <HomeIcon className="w-4 h-4 text-secondary" />
+                                    <div className="inline-flex items-center gap-2 mt-1 px-3 py-1 bg-slate-50 rounded-lg border border-slate-100 text-slate-600 text-sm print:text-[8px] print:px-1 print:py-0.5 print:mt-1 print:gap-1">
+                                        <HomeIcon className="w-4 h-4 print:w-2.5 print:h-2.5 text-secondary" />
                                         住宿: {tripData.dailyAccommodations[dayIndex] || tripData.accommodation}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Timeline */}
-                            <div className="border-l-2 border-slate-100 ml-5 space-y-8 pb-4 print:space-y-4 print:pb-0">
+                            <div className="border-l-2 border-slate-100 ml-5 space-y-8 pb-4 print:space-y-3 print:pb-0 print:ml-2.5 print:border-slate-200">
                                 {activities.map(activity => (
-                                    <div key={activity.id} className="relative pl-8 group">
+                                    <div key={activity.id} className="relative pl-8 group print:pl-3">
                                         {/* Timeline Dot */}
-                                        <div className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 border-white shadow-sm ${activity.rating === 5 ? 'bg-accent scale-125' : 'bg-primary'}`}></div>
+                                        <div className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 border-white shadow-sm print:-left-[4.5px] print:top-1 print:w-2 print:h-2 print:border-0 ${activity.rating === 5 ? 'bg-accent scale-125 print:scale-100' : 'bg-primary'}`}></div>
                                         
-                                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 print:flex-col print:gap-2">
-                                            <div className="w-20 pt-1 font-bold text-slate-400 text-sm flex-none print:w-full print:pt-0">
+                                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 print:flex-col print:gap-0.5">
+                                            <div className="w-20 pt-1 font-bold text-slate-400 text-sm flex-none print:w-full print:pt-0 print:text-[10px] print:text-primary">
                                                 {activity.startTime}
                                             </div>
                                             
-                                            <div className="flex-1 bg-slate-50 rounded-2xl p-5 print:p-3 hover:bg-white hover:shadow-lg transition-all border border-transparent hover:border-slate-100 group-hover:-translate-y-1 duration-300">
-                                                <div className="flex justify-between items-start mb-2 print:mb-1">
-                                                    <h3 className="text-lg font-bold text-slate-800 group-hover:text-primary transition-colors print:text-base">{activity.title}</h3>
+                                            <div className="flex-1 bg-slate-50 rounded-2xl p-5 hover:bg-white hover:shadow-lg transition-all border border-transparent hover:border-slate-100 print:bg-transparent print:p-0 print:border-none print:shadow-none print:hover:shadow-none">
+                                                <div className="flex justify-between items-start mb-2 print:mb-0.5">
+                                                    <h3 className="text-lg font-bold text-slate-800 group-hover:text-primary transition-colors print:text-[12px] print:leading-tight print:text-slate-900">{activity.title}</h3>
                                                     {activity.rating === 5 && (
-                                                        <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                                                        <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1 print:hidden">
                                                             <Star className="w-3 h-3 fill-current" /> 必去
                                                         </span>
                                                     )}
                                                 </div>
-                                                <p className="text-slate-600 text-sm leading-relaxed mb-3 print:text-xs print:mb-2 print:-mt-1">{activity.description}</p>
-                                                <div className="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-wider print:text-[10px]">
-                                                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {activity.durationMinutes} 分鐘</span>
-                                                    <span className={`px-2 py-0.5 rounded ${activity.type === 'food' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
+                                                <p className="text-slate-600 text-sm leading-relaxed mb-3 print:text-[9.5px] print:mb-1.5 print:leading-snug print:text-slate-600">{activity.description}</p>
+                                                <div className="flex items-center gap-4 text-xs font-bold text-slate-400 uppercase tracking-wider print:text-[8px] print:gap-2">
+                                                    <span className="flex items-center gap-1"><Clock className="w-3 h-3 print:w-2 print:h-2" /> {activity.durationMinutes} 分鐘</span>
+                                                    <span className={`px-2 py-0.5 rounded print:px-1 print:py-0 print:bg-slate-100 print:text-slate-600 ${activity.type === 'food' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
                                                         {activity.type === 'food' ? '美食' : activity.type === 'sight' ? '景點' : activity.type === 'shopping' ? '購物' : '活動'}
                                                     </span>
                                                 </div>
