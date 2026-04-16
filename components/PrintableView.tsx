@@ -39,15 +39,13 @@ export const PrintableView: React.FC<PrintableViewProps> = ({ tripData, itinerar
               .planner-print-wrapper .hover\\:scale-\\[1\\.02\\] { transform: none !important; }
               .planner-print-wrapper .shadow-sm { box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
               
-              /* Overview Scaling */
+              /* Overview Printing */
               .overview-print-container {
-                 height: 700px;
-                 overflow: hidden;
+                 /* We don't need fixed height constraint if it flows to next page or uses grid */
               }
               .overview-print-wrapper {
-                 transform: scale(0.35);
-                 transform-origin: top left;
-                 width: 285%; /* 100 / 0.35 */
+                 /* No more scaling, just let it use native print media queries */
+                 width: 100%;
               }
             }
           `}
@@ -76,8 +74,7 @@ export const PrintableView: React.FC<PrintableViewProps> = ({ tripData, itinerar
         <div className="page-break"></div>
 
         {/* Page 2: Overview */}
-        <div className="p-4">
-          <h1 className="text-3xl font-bold mb-2 text-center">{tripData.destination} 行程概覽</h1>
+        <div className="pt-2"> {/* Minimal padding to save space */}
           <div className="overview-print-container">
             <div className="overview-print-wrapper">
               <ItineraryOverview tripData={tripData} itinerary={itinerary} />
